@@ -21,6 +21,7 @@ Mappings.defaults = [
   ['O',         ':open @%'],
   ['b',         ':bookmarks '],
   ['t',         ':tabnew '],
+  ['è',         ':popupnew '],
   ['I',         ':history '],
   ['T',         ':tabnew @%'],
   ['B',         ':buffer '],

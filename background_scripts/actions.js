@@ -57,6 +57,13 @@ Actions = (function() {
         pinned: o.request.tab.pinned,
         index: getTabOrderIndex(o.sender.tab)
       }, o.request.repeats);
+    } else if (o.request.popup) {
+      chrome.windows.create({
+        url: o.url,
+        focused: o.request.tab.active,
+        incognito: o.request.tab.incognito,
+        type: "popup",
+      });
     } else {
       chrome.tabs.update({
         url: o.url,

@@ -3,6 +3,7 @@ var settings, sessions;
 
 Command.descriptions = [
   ['open',         'Open a link in the current tab'],
+  ['popupnew',     'Open a link in a new popup'],
   ['tabnew',       'Open a link in a new tab'],
   ['tabnext',      'Switch to the next open tab'],
   ['tabprevious',  'Switch to the previous open tab'],
@@ -391,6 +392,7 @@ Command.callCompletionFunction = (function() {
     case 'tabopen':
     case 'open':
     case 'new':
+    case 'popupnew':
       searchCompletion(value);
       return true;
     case 'chrome':
@@ -749,6 +751,18 @@ Command.execute = function(value, repeats) {
       tab: tab,
       url: Complete.convertToLink(value, tab.isURL, tab.isLink),
       repeats: repeats,
+      noconvert: true
+    });
+    return;
+  }
+
+   if (/^(popupnew)$/
+      .test(value.replace(/ .*/, ''))) {
+    RUNTIME('openLink', {
+      tab: tab,
+      url: Complete.convertToLink(value, tab.isURL, tab.isLink),
+      repeats: repeats,
+      popup: true,
       noconvert: true
     });
     return;

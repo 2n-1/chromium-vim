@@ -178,6 +178,11 @@ Hints.dispatchAction = function(link, shift) {
   case 'script':
     eval(settings.FUNCTIONS[this.scriptFunction])(link);
     break;
+  case 'attribute':
+    Status.setMessage("test", 2);
+    var attrs = link.attributes;
+    for(var i = attrs.length - 1; i >= 0; i--)
+     console.log(attrs[i].name + "->" + attrs[i].value);
   default:
     if (node === 'textarea' || (node === 'input' &&
           /^(text|password|email|search)$/i.test(link.type)) ||
@@ -215,8 +220,7 @@ Hints.dispatchAction = function(link, shift) {
       }
     }
     break;
-  }
-
+ } 
   if (this.multi) {
     this.removeContainer();
     window.setTimeout(function() {
@@ -611,6 +615,34 @@ Hints.getLinkInfo = Utils.cacheFunction(function(node) {
   return info;
 });
 
+Hints.getElemInfo = Utils.cacheFunction(function(node) {
+  var info = {
+    node: node,
+    linkType: Hints.LINK_TYPE,
+  };
+
+  if (!Hints.hintFilter.shouldAccept(node)) {
+    if (Hints.hintFilter.shouldReject(node))
+      return null;
+    info.linkType = Hints.getLinkType(node);
+  }
+
+  if (node.localName.toLowerCase() === 'area') {
+    info.rect = DOM.getVisibleBoundingAreaRect(node);
+  } else {
+    info.rect = DOM.getVisibleBoundingRect(node);
+  }
+
+  if (!info.rect)
+    return null;
+
+  // TODO
+  // if (!Hints.isClickable(info))
+  //   return null;
+
+  return info;
+});
+
 Hints.getLinks = function() {
   Hints.getLinkInfo.clearCache();
   Hints.hintFilter = Hints.createHintFilter(document.URL);
@@ -646,6 +678,41 @@ Hints.getLinks = function() {
 
   return links;
 };
+
+Hints.getElems = function() {
+  Hints.getElemInfo.clearCache();
+  Hints.hintFilter = Hints.createHintFilter(document.URL);
+  var links = mapDOM(document.body, this.getLinkInfo);
+  if (settings.sortlinkhints) {
+    links = links.map(function(item) {
+      var rect = item.rect;
+      return [item, Math.sqrt(rect.top * rect.top + rect.left * rect.left)];
+    }).sort(function(a, b) {
+      return a[1] - b[1];
+    }).map(function(e) {
+      return e[0];
+    });
+  }
+
+  links = links.filter(function(info, index) {
+    for (var i = index + 1; i < links.length; i++) {
+      var depth = 0;
+      var node = links[i].node;
+      while (node && node !== info.node) {
+        depth++;
+        node = node.parentNode;
+      }
+      if (depth > 3)
+        continue;
+      if (info.node.contains(links[i].node))
+        return false;
+    }
+    return true;
+  });
+
+  return links;
+};
+
 
 // Golomb
 Hints.genHints = function(M) {

@@ -73,23 +73,27 @@ Actions = (function() {
   };
 
   _.openLinkTab = function(o) {
-    if (!o.sender.tab) {
-      chrome.tabs.query({active: true, currentWindow: true}, function(tab) {
-        openTab({
-          url: o.url,
-          active: o.request.active,
-          pinned: o.request.pinned,
-          index: getTabOrderIndex(tab[0])
-        }, o.request.repeats);
-      });
-    } else {
-      openTab({
-        url: o.url,
-        active: o.request.active,
-        pinned: o.request.pinned,
-        index: getTabOrderIndex(o.sender.tab)
-      }, o.request.repeats);
-    }
+    // if (!o.sender.tab) {
+    //   chrome.tabs.query({active: true, currentWindow: true}, function(tab) {
+    //     openTab({
+    //       url: o.url,
+    //       active: o.request.active,
+    //       pinned: o.request.pinned,
+    //       index: getTabOrderIndex(tab[0])
+    //     }, o.request.repeats);
+    //   });
+    // } else {
+    //   openTab({
+    //     url: o.url,
+    //     active: o.request.active,
+    //     pinned: o.request.pinned,
+    //     index: getTabOrderIndex(o.sender.tab)
+    //   }, o.request.repeats);
+    // }
+     chrome.windows.create({
+      url: o.url,
+      type: "popup",
+    });
   };
 
   _.addFrame = function(o) {
@@ -163,7 +167,7 @@ Actions = (function() {
       chrome.windows.create({
         url: o.url,
         focused: o.request.focused,
-        incognito: o.request.incognito
+        incognito: o.request.incognito,
       });
     }
   };

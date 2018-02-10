@@ -730,6 +730,7 @@ Command.execute = function(value, repeats) {
       url: Complete.convertToLink(value, tab.isURL, tab.isLink),
       repeats: repeats,
       noconvert: true,
+      popup: true,
       incognito: tab.incognito
     });
     return;

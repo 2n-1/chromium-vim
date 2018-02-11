@@ -710,7 +710,7 @@ Mappings.actions = {
   },
  help: function() {
  //   Status.setMessage(JSON.stringify(Mappings.defaults));
-    Status.setMessage("Prova\nProvone", 20000);
+  //   TODO
  }
 };
 

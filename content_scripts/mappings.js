@@ -124,7 +124,7 @@ Mappings.defaults = [
   ['n',         'nextSearchResult'],
   ['N',         'previousSearchResult'],
   ['/',         'openSearchBar'],
-  ['?',         'openSearchBarReverse'],
+ // ['?',         'openSearchBarReverse'],
   [':',         'openCommandBar'],
   ['<C-6>',     'lastUsedTab'],
   ['.',         'repeatCommand'],
@@ -132,7 +132,8 @@ Mappings.defaults = [
   ['g+',        'incrementURLPath'],
   ['g-',        'decrementURLPath'],
   ['#',         'resetScrollFocus'],
-  ['cm',        'muteTab']
+  ['cm',        'muteTab'],
+  ['?',         'help']
 ];
 
 Mappings.defaultsClone = Object.clone(Mappings.defaults);
@@ -706,9 +707,13 @@ Mappings.actions = {
   },
   muteTab: function() {
     RUNTIME('muteTab');
-  }
-
+  },
+ help: function() {
+ //   Status.setMessage(JSON.stringify(Mappings.defaults));
+    Status.setMessage("Prova\nProvone", 20000);
+ }
 };
+
 
 (function() {
   var replaceURLNumber = function(callback) {

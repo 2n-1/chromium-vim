@@ -23,6 +23,7 @@ Command.descriptions = [
   ['mksession',    'Create a saved session of current tabs'],
   ['delsession',   'Delete sessions'],
   ['map',          'Map a command'],
+  ['mappings',     'Display all mappings'], // TODO
   ['unmap',        'Unmap a command'],
   ['tabattach',    'Move current tab to another window'],
   ['tabdetach',    'Move current tab to a new window'],
